@@ -1,25 +1,20 @@
 package worker;
 
-import static org.junit.jupiter.api.Assertions.*;
-class WorkerTest {
+import org.junit.Test;
 
-    @org.junit.jupiter.api.Test
-    void main() {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class WorkerTest {
+    @Test
+    public void updateVote() {
+        assertTrue(true);
     }
 
-    @org.junit.jupiter.api.Test
-    void updateVote() {
+    @Test
+    public void validateConnectionUrl(){
+        String connection = Worker.getConnectionUrl("localhost");
+        assertEquals("jdbc:postgresql://localhost/postgres", connection);
     }
 
-    @org.junit.jupiter.api.Test
-    void connectToRedis() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void connectToDB() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void sleep() {
-    }
 }

@@ -68,7 +68,7 @@ class Worker {
     try {
 
       Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://" + host + "/postgres";
+      String url = getConnectionUrl(host);
 
       while (conn == null) {
         try {
@@ -90,6 +90,10 @@ class Worker {
 
     System.err.println("Connected to db");
     return conn;
+  }
+
+  public static String getConnectionUrl(String host) {
+    return "jdbc:postgresql://" + host + "/postgres";
   }
 
   static void sleep(long duration) {
