@@ -45,7 +45,7 @@ class Worker {
     }
   }
 
-  static Jedis connectToRedis(String host) {
+  public static Jedis connectToRedis(String host) throws JedisConnectionException {
     Jedis conn = new Jedis(host);
 
     while (true) {
@@ -70,14 +70,7 @@ class Worker {
       Class.forName("org.postgresql.Driver");
       String url = getConnectionUrl(host);
 
-      while (conn == null) {
-        try {
-          conn = DriverManager.getConnection(url, "postgres", "postgres");
-        } catch (SQLException e) {
-          System.err.println("Waiting for db");
-          sleep(1000);
-        }
-      }
+      conn = getConnection(conn, url);
 
       PreparedStatement st = conn.prepareStatement(
         "CREATE TABLE IF NOT EXISTS votes (id VARCHAR(255) NOT NULL UNIQUE, vote VARCHAR(255) NOT NULL)");
@@ -92,6 +85,18 @@ class Worker {
     return conn;
   }
 
+  private static Connection getConnection(Connection conn, String url) {
+    while (conn == null) {
+      try {
+        conn = DriverManager.getConnection(url, "postgres", "postgres");
+      } catch (SQLException e) {
+        System.err.println("Waiting for db");
+        sleep(1000);
+      }
+    }
+    return conn;
+  }
+
   public static String getConnectionUrl(String host) {
     return "jdbc:postgresql://" + host + "/postgres";
   }
@@ -103,4 +108,5 @@ class Worker {
       System.exit(1);
     }
   }
+
 }
