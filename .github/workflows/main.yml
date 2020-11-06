@@ -41,21 +41,49 @@ jobs:
       
       - name: Build worker 
         run: docker build -t milelucero98/worker:latest ./worker
-        
-      - name: Push worker
-        run: docker push milelucero98/worker:latest
-      
-      - name: Archive code coverage results
+  
+  testing:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+     
+      - name: Archive integration-test-report-results
         uses: actions/upload-artifact@v2
         with:
           name: integration-test-report
-          path: output/result.xml
+          path: example-voting-app/result/output/result.xml
       
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+     
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+        
+      - name: Push result
+        run: docker push milelucero98/result:latest
+      
+      - name: Push vote
+        run: docker push milelucero98/vote:latest
+        
+      - name: Push worker
+        run: docker push milelucero98/worker:latest
+      
         
 
        
