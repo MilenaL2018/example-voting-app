@@ -1,4 +1,6 @@
 Example Voting App
+
+![CI](https://github.com/MilenaL2018/example-voting-app/workflows/CI/badge.svg)
 =========
 
 A simple distributed application running across multiple Docker containers.
