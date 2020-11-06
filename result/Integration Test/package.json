@@ -14,7 +14,12 @@
         "@codeceptjs/configure": "^0.6.0",
         "@codeceptjs/examples": "^1.2.1",
         "@codeceptjs/ui": "^0.4.2",
-        "codeceptjs": "^3.0.0",
+        "chai": "^4.2.0",
+        "codeceptjs": "^3.0.1",
         "playwright": "^1.5.2"
+    },
+    "dependencies": {
+        "mocha-junit-reporter": "^2.0.0",
+        "mocha-multi": "^1.1.3"
     }
 }
