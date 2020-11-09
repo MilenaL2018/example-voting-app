@@ -71,7 +71,7 @@ jobs:
   deploy_result:
       name: Delpoy Result in Heroku
       runs-on: ubuntu-latest
-      needs: [build]
+      needs: [deploy_worker]
       steps:
         - uses: actions/checkout@v2
         - uses: akhileshns/heroku-deploy@v3.6.8
@@ -84,7 +84,7 @@ jobs:
   deploy_vote:
       name: Delpoy Vote in Heroku
       runs-on: ubuntu-latest
-      needs: [build]
+      needs: [deploy_result]
       steps:
         - uses: actions/checkout@v2
         - uses: akhileshns/heroku-deploy@v3.6.8
@@ -94,19 +94,25 @@ jobs:
             heroku_email: ${{ secrets.HEROKU_EMAIL }}
             appdir: "vote"
   
-  ##testing:
+  ##integration-testing:
     #runs-on: ubuntu-latest
-    #  - name: Archive code coverage results
-    #    uses: actions/upload-artifact@v2
-    #    with:
-    #      name: integration-test-report
-    #      path: output/result.xml
+    #needs: [deploy_result]
+    #steps:  
+    #  steps:
+    #     - uses: actions/checkout@v2
+    #     - name: SonarCloud Scan
+    #       uses: SonarSource/sonarcloud-github-action@master
+    #       env:
+    #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+    #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     #  
-    #  - name: SonarCloud Scan
-    #    uses: SonarSource/sonarcloud-github-action@master
-    #    env:
-    #      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-    #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     - name: Archive code coverage results
+    #       uses: actions/upload-artifact@v2
+    #         with:
+    #           name: integration-test-report
+    #           path: output/result.xml
+    #  
+    #  
     #  
        
        
