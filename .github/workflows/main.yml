@@ -58,6 +58,7 @@ jobs:
   deploy_worker:
       name: Delpoy Worker in Heroku
       runs-on: ubuntu-latest
+      needs: [build]
       steps:
         - uses: actions/checkout@v2
         - uses: akhileshns/heroku-deploy@v3.6.8
@@ -70,6 +71,7 @@ jobs:
   deploy_result:
       name: Delpoy Result in Heroku
       runs-on: ubuntu-latest
+      needs: [build]
       steps:
         - uses: actions/checkout@v2
         - uses: akhileshns/heroku-deploy@v3.6.8
@@ -82,6 +84,7 @@ jobs:
   deploy_vote:
       name: Delpoy Vote in Heroku
       runs-on: ubuntu-latest
+      needs: [build]
       steps:
         - uses: actions/checkout@v2
         - uses: akhileshns/heroku-deploy@v3.6.8
