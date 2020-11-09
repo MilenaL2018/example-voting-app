@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.0280" tests="2" failures="1">
+  <testsuite name="Root Suite" timestamp="2020-11-06T22:16:12" tests="0" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="result" timestamp="2020-11-06T22:16:12" tests="2" file="/home/milena/Desktop/Proyecto-Integrador/example-voting-app/result/Integration Test/result_test.js" time="0.0280" failures="1">
+    <testcase name="result: Verify a successful call" time="0.0260" classname="Verify a successful call">
+    </testcase>
+    <testcase name="result: I vote cats!" time="0.0020" classname="I vote cats!">
+      <failure message="I.amOnPage is not a function" type="TypeError"><![CDATA[TypeError: I.amOnPage is not a function
+    at Test.<anonymous> (result_test.js:12:5)
+    at Context.test.fn (node_modules/codeceptjs/lib/scenario.js:91:14)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>
