@@ -15,7 +15,7 @@ public class WorkerTest {
         assertEquals("jdbc:postgresql://localhost/postgres", connection);
     }
 
-    @Test
+    /* @Test
     public void testException_Jedis() {
        Worker test = new Worker();
 
@@ -24,6 +24,6 @@ public class WorkerTest {
         } catch (InterruptedException e) {
             assertEquals(e.getMessage(), "Waiting for redis");
         }
-    }
+    } */
 
 }

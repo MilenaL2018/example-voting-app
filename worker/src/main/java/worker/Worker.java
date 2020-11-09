@@ -8,7 +8,8 @@ import org.json.JSONObject;
 class Worker {
   public static void main(String[] args) {
     try {
-      Jedis redis = connectToRedis("redis");
+
+      Jedis redis = connectToRedis(JedisHost("redis"));
       Connection dbConn = connectToDB("db");
 
       System.err.println("Watching vote queue");
@@ -44,69 +45,3 @@ class Worker {
       update.executeUpdate();
     }
   }
-
-  public static Jedis connectToRedis(String host) throws JedisConnectionException {
-    Jedis conn = new Jedis(host);
-
-    while (true) {
-      try {
-        conn.keys("*");
-        break;
-      } catch (JedisConnectionException e) {
-        System.err.println("Waiting for redis");
-        sleep(1000);
-      }
-    }
-
-    System.err.println("Connected to redis");
-    return conn;
-  }
-
-  static Connection connectToDB(String host) throws SQLException {
-    Connection conn = null;
-
-    try {
-
-      Class.forName("org.postgresql.Driver");
-      String url = getConnectionUrl(host);
-
-      conn = getConnection(conn, url);
-
-      PreparedStatement st = conn.prepareStatement(
-        "CREATE TABLE IF NOT EXISTS votes (id VARCHAR(255) NOT NULL UNIQUE, vote VARCHAR(255) NOT NULL)");
-      st.executeUpdate();
-
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-
-    System.err.println("Connected to db");
-    return conn;
-  }
-
-  private static Connection getConnection(Connection conn, String url) {
-    while (conn == null) {
-      try {
-        conn = DriverManager.getConnection(url, "postgres", "postgres");
-      } catch (SQLException e) {
-        System.err.println("Waiting for db");
-        sleep(1000);
-      }
-    }
-    return conn;
-  }
-
-  public static String getConnectionUrl(String host) {
-    return "jdbc:postgresql://" + host + "/postgres";
-  }
-
-  static void sleep(long duration) {
-    try {
-      Thread.sleep(duration);
-    } catch (InterruptedException e) {
-      System.exit(1);
-    }
-  }
-
-}
