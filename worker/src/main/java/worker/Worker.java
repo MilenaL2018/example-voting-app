@@ -45,3 +45,4 @@ class Worker {
       update.executeUpdate();
     }
   }
+}
