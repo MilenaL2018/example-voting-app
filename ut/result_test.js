@@ -1,6 +1,6 @@
 Feature('result');
 
-import { expect } from 'chai';
+const expect = require('chai').expect;
 const {I} = inject();
 
 Scenario('Verify a successful call', async () => {

@@ -9,13 +9,13 @@ exports.config = {
   output: './output',
   helpers: {
     Playwright: {
-      url: '',
+      url: '/',
       show: true,
       browser: 'chromium'
     }
   },
   include: {
-    I: './steps_file.js'
+    I: './result_test.js'
   },
   bootstrap: null,
   mocha: {},

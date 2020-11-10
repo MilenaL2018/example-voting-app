@@ -36,7 +36,7 @@ def hello():
 
 
 @app.route("/", methods=['POST', 'GET'])
-def count_vote(vote, voter_id):
+def countvote(vote, voter_id):
 
     if request.method == 'POST':
         redis = get_redis()
@@ -50,6 +50,7 @@ def count_vote(vote, voter_id):
 def get_voter():
     voter_id = request.cookies.get('voter_id')
     if not voter_id:
+        print('Usuario nuevo')
         voter_id = hex(random.getrandbits(64))[2:-1]
     return voter_id
 
