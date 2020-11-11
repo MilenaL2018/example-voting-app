@@ -33,8 +33,8 @@ pipeline {
                 sh script:'''
                   #!/bin/bash
                   docker-compose -d up
-                  sleep 7
-                  cd ./it
+                  sleep 10
+                  cd ./ut
                   npx codeceptjs run --steps --reporter mocha-multi
                 '''
             }
@@ -46,7 +46,13 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
+    stage('Static code analisis') {
+            steps {
+                sh 'mvn sonar:sonar -Dsonar.projectKey=AgusVelez5_spring-boot-app -Dsonar.organization=agusvelez5 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=b378dbfb4258b2712dd3dc78052400611207bd8a  -Dmaven.test.failure.ignore=true -Dsonar.scanner.force-deprecated-java-version=truenode'
+            }
+    }
+        
+    stage('Push image') {
             steps {
                 withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
