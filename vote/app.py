@@ -22,7 +22,7 @@ def get_redis():
 def hello():
     voter_id = get_voter()
 
-    vote = count_vote(None, voter_id)
+    vote = countvote(None, voter_id)
 
     resp = make_response(render_template(
         'index.html',
