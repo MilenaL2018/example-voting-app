@@ -71,10 +71,36 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: heroku container:release -a example-voting-app-vote web
 
+  deployResult:
+    name: Deploy Result in Heroku
+    runs-on: ubuntu-latest
+    needs: [build, deployVote]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          cd ./result
+          heroku container:push -a example-voting-app-result web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:release -a example-voting-app-result web
+
   deployWorker:
     name: Deploy Worker in Heroku
     runs-on: ubuntu-latest
-    needs: [build, deployVote]
+    needs: [build, deployResult]
     steps:
       - uses: actions/checkout@v2
       - name: Login to Heroku Container registry
@@ -104,32 +130,6 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: heroku container:release -a example-voting-app-worker web
-  
-  deployResult:
-    name: Deploy Result in Heroku
-    runs-on: ubuntu-latest
-    needs: [build, deployWorker]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Login to Heroku Container registry
-        env: 
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-        run: heroku container:login 
-      - name: Setting Vars
-        env: 
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-        run: |
-          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
-      - name: Build and Push
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-        run: |
-          cd ./result
-          heroku container:push -a example-voting-app-result web
-      - name: Release
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-        run: heroku container:release -a example-voting-app-result web
   
   #unit_testing_vote:
   #  runs-on: ubuntu-latest
