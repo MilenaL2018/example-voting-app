@@ -16,7 +16,7 @@ PORT = int(os.environ.get("PORT", 5050))
 
 hostname = socket.gethostname()
 
-app = Flask(name)
+app = Flask(__name__)
 
 def get_redis(REDIS_HOST, REDIS_PASS, REDIS_PORT):
     if not hasattr(g, 'redis'):
@@ -62,6 +62,5 @@ def get_voter(voter_id):
         voter_id = hex(random.getrandbits(64))[2:-1]
     return voter_id
 
-
-if name == "main":
+if __name__ == "main":
     app.run(host='0.0.0.0', threaded=True, port=PORT)
