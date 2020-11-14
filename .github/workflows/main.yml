@@ -50,6 +50,92 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
+  deployVote:
+    name: Deploy Vote in Heroku
+    runs-on: ubuntu-latest
+    needs: [deployWorker]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
+          heroku config:set REDIS_PASS=${{ secrets.REDIS_PASS }} -a example-voting-app-vote
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./vote
+          heroku container:push -a example-voting-app-vote web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a example-voting-app-vote web
+  
+  deployWorker:
+    name: Deploy Worker in Heroku
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku config:set POST_PORT=${{ secrets.POST_PORT  }} -a example-voting-app-worker
+          heroku config:set POST_DB=${{ secrets.POST_DB  }} -a example-voting-app-worker
+          heroku config:set POST_HOST=${{ secrets.POST_HOST  }} -a example-voting-app-worker
+          heroku config:set POST_USER=${{ secrets.POST_USER  }} -a example-voting-app-worker
+          heroku config:set POST_PASS=${{ secrets.POST_PASS  }} -a example-voting-app-worker
+          heroku config:set POST_URI=${{ secrets.POST_URI   }} -a example-voting-app-worker
+          heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-worker
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
+          heroku config:set REDIS_PASS=${{ secrets.REDIS_PASS }} -a example-voting-app-worker
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./worker
+          heroku container:push -a example-voting-app-worker web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a example-voting-app-worker web
+  
+  deployResult:
+    name: Deploy Result in Heroku
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku config:set POST_URI=${{ secrets.POST_URI }} -a example-voting-app-result
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./result
+          heroku container:push -a example-voting-app-result web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a example-voting-app-result web
   
   unit_testing_vote:
     runs-on: ubuntu-latest
@@ -79,25 +165,25 @@ jobs:
           name: Unit Test Results (Python ${{ matrix.python-version }})
           path: pytest.xml
   
-  publish-test-results:
-      name: "Publish Unit Tests Results"
-      needs: unit_testing_vote
-      runs-on: ubuntu-latest
-      # the build-and-test job might be skipped, we don't need to run this job then
-      if: success() || failure()
-  
-      steps:
-        - name: Download Artifacts
-          uses: actions/download-artifact@v2
-          with:
-            path: artifacts
-  
-        - name: Publish Unit Test Results
-          uses: EnricoMi/publish-unit-test-result-action@v1.4
-          with:
-            check_name: Unit Test Results
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            files: pytest.xml
+  #publish-test-results:
+  #    name: "Publish Unit Tests Results"
+  #    needs: unit_testing_vote
+  #    runs-on: ubuntu-latest
+  #    # the build-and-test job might be skipped, we don't need to run this job then
+  #    if: success() || failure()
+  #
+  #    steps:
+  #      - name: Download Artifacts
+  #        uses: actions/download-artifact@v2
+  #        with:
+  #          path: artifacts
+  #
+  #      - name: Publish Unit Test Results
+  #        uses: EnricoMi/publish-unit-test-result-action@v1.4
+  #        with:
+  #          check_name: Unit Test Results
+  #          github_token: ${{ secrets.GITHUB_TOKEN }}
+  #          files: pytest.xml
   #
   #unit_testing_worker:
   #  runs-on: ubuntu-latest
@@ -111,44 +197,6 @@ jobs:
   #      - name: Build with Maven
   #        run: mvn -B package --file pom.xml
   
-  deploy_worker:
-    name: Delpoy Worker in Heroku
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.6.8
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API}}
-          heroku_app_name: 'example-voting-app-worker'
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          appdir: "worker"
-
-  deploy_result:
-    name: Delpoy Result in Heroku
-    runs-on: ubuntu-latest
-    needs: [deploy_worker]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.6.8
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API}}
-          heroku_app_name: 'example-voting-app-result'
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          appdir: "result"
-
-  deploy_vote:
-    name: Delpoy Vote in Heroku
-    runs-on: ubuntu-latest
-    needs: [deploy_result]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.6.8
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API}}
-          heroku_app_name: 'example-voting-app-vote'
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          appdir: "vote"
   
   ##integration-testing:
     #runs-on: ubuntu-latest
