@@ -93,7 +93,7 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           heroku config:set POST_PORT=${{ secrets.POST_PORT  }} -a example-voting-app-worker
-          heroku config:set POST_DB=${{ secrets.POST_DB  }} -a example-voting-app-worker
+          heroku config:set POST_DATABASE=${{ secrets.POST_DATABASE  }} -a example-voting-app-worker
           heroku config:set POST_HOST=${{ secrets.POST_HOST  }} -a example-voting-app-worker
           heroku config:set POST_USER=${{ secrets.POST_USER  }} -a example-voting-app-worker
           heroku config:set POST_PASS=${{ secrets.POST_PASS  }} -a example-voting-app-worker

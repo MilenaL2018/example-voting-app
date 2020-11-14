@@ -7,13 +7,16 @@ import json
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
+
+REDIS_PASSWORD= os.environ['REDIS_PASS']
+REDIS_HOST= os.environ['REDIS_HOST']
+REDIS_PORT= os.environ['REDIS_PORT']
+
+PORT = int(os.environ.get("PORT", 5050))
+
 hostname = socket.gethostname()
 
 #redis://default:password@host:port
-
-REDIS_PASSWORD= 'Iro1JtpbjfBFrW2xBO5RYBQSVfTtuOPh'
-REDIS_HOST='redis-12781.c114.us-east-1-4.ec2.cloud.redislabs.com'
-REDIS_PORT='12781'
 
 app = Flask(__name__)
 
@@ -64,5 +67,5 @@ def get_voter():
     return voter_id
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+if name == "main":
+    app.run(host='0.0.0.0', threaded=True, port=PORT)
