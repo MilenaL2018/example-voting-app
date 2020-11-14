@@ -16,25 +16,26 @@ PORT = int(os.environ.get("PORT", 5050))
 
 hostname = socket.gethostname()
 
-#redis://default:password@host:port
+app = Flask(name)
 
-app = Flask(__name__)
-
-def get_redis(REDIS_HOST, REDIS_PASSWORDWORD, REDIS_PORT):
+def get_redis(REDIS_HOST, REDIS_PASS, REDIS_PORT):
     if not hasattr(g, 'redis'):
-        g.redis = Redis(
-            host= REDIS_HOST, 
-            port= REDIS_PORT, 
-            password= REDIS_PASSWORDWORD,
-            socket_timeout=5)
+        try:
+            g.redis = Redis(
+                host=REDIS_HOST, 
+                port=REDIS_PORT,
+                password=REDIS_PASS,
+                socket_timeout=5)
+        except Exception as ex:
+            print('Error:', ex)
+            g.redis = None
     return g.redis
-
 
 @app.route("/", methods=['POST', 'GET'])
 def hello():
-    voter_id = get_voter()
+    voter_id = get_voter(request.cookies.get('voter_id'))
 
-    vote = countvote(None, voter_id)
+    vote = count_vote(None, voter_id)
 
     resp = make_response(render_template(
         'index.html',
@@ -46,21 +47,16 @@ def hello():
     resp.set_cookie('voter_id', voter_id)
     return resp
 
-
-@app.route("/", methods=['POST', 'GET'])
-def countvote(vote, voter_id):
-
+def count_vote(vote, voter_id):
     if request.method == 'POST':
-        redis = get_redis()
+        redis = get_redis(REDIS_HOST=REDIS_HOST, REDIS_PASS=REDIS_PASS, REDIS_PORT=REDIS_PORT)
         vote = request.form['vote']
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
         redis.rpush('votes', data)
     return vote
 
-
-@app.route("/", methods=['POST', 'GET'])
-def get_voter():
-    voter_id = request.cookies.get('voter_id')
+def get_voter(voter_id):
+    voter_id = voter_id
     if not voter_id:
         print('Usuario nuevo')
         voter_id = hex(random.getrandbits(64))[2:-1]
