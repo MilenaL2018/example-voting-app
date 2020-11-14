@@ -14,7 +14,7 @@ io.set('transports', ['polling']);
 
 var port = process.env.PORT || 4000;
 
-var POST_URI = process.env.POST_URI || 'postgres://postgres:postgres@db/postgres';
+var POSTGRES_URI = process.env.POSTGRES_URI || 'postgres://postgres:postgres@db/postgres';
 
 io.sockets.on('connection', function (socket) {
 

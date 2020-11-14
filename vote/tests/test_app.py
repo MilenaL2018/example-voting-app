@@ -13,7 +13,7 @@ class TextService(unittest.TestCase):
     response = tester.get(self.url)
     self.assertEqual(response.status_code, 200)
 
-  def test_post_status_200(self):
+  def test_POSTGRES_status_200(self):
     payload={'vote': 'a'}
     headers = {
       'Cookie': 'voter_id=39e29be59e1d5c6'
@@ -21,7 +21,7 @@ class TextService(unittest.TestCase):
     response = requests.post(self.url, headers=headers, data=payload)
     self.assertEqual(response.status_code, 200)
 
-  def test_post_status_400(self):
+  def test_POSTGRES_status_400(self):
     app.testing = True  
     tester = app.test_client(self)
     response = tester.post(self.url)

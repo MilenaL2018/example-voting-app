@@ -59,7 +59,7 @@ jobs:
         run: |
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
-          heroku config:set REDIS_PASS=${{ secrets.REDIS_PASS }} -a example-voting-app-vote
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
       - name: Build and Push
         env:
           HEROKU_API: ${{ secrets.HEROKU_API }}
@@ -85,15 +85,15 @@ jobs:
         env: 
           HEROKU_API: ${{ secrets.HEROKU_API }}
         run: |
-          heroku config:set POST_PORT=${{ secrets.POST_PORT  }} -a example-voting-app-worker
-          heroku config:set POST_DATABASE=${{ secrets.POST_DATABASE  }} -a example-voting-app-worker
-          heroku config:set POST_HOST=${{ secrets.POST_HOST  }} -a example-voting-app-worker
-          heroku config:set POST_USER=${{ secrets.POST_USER  }} -a example-voting-app-worker
-          heroku config:set POST_PASS=${{ secrets.POST_PASS  }} -a example-voting-app-worker
-          heroku config:set POST_URI=${{ secrets.POST_URI   }} -a example-voting-app-worker
+          heroku config:set POSTGRES_PORT=${{ secrets.POSTGRES_PORT  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_HOST=${{ secrets.POSTGRES_HOST  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_USER=${{ secrets.POSTGRES_USER  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_PASS=${{ secrets.POSTGRES_PASS  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI   }} -a example-voting-app-worker
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-worker
           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
-          heroku config:set REDIS_PASS=${{ secrets.REDIS_PASS }} -a example-voting-app-worker
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-worker
       - name: Build and Push
         env:
           HEROKU_API: ${{ secrets.HEROKU_API }}
@@ -119,7 +119,7 @@ jobs:
         env: 
           HEROKU_API: ${{ secrets.HEROKU_API }}
         run: |
-          heroku config:set POST_URI=${{ secrets.POST_URI }} -a example-voting-app-result
+          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
       - name: Build and Push
         env:
           HEROKU_API: ${{ secrets.HEROKU_API }}

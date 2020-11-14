@@ -8,19 +8,19 @@ import org.json.JSONObject;
 
 class Worker {
 
-  private static String POST_HOST = System.getenv("POST_HOST");
+  private static String POSTGRES_HOST = System.getenv("POSTGRES_HOST");
 
-  private static String POST_DATABASE = System.getenv("POST_DATABASE");
+  private static String POSTGRES_DATABASE = System.getenv("POSTGRES_DATABASE");
 
-  private static String POST_PASS = System.getenv("POST_PASS");
+  private static String POSTGRES_PASS = System.getenv("POSTGRES_PASS");
 
-  private static String POST_PORT = System.getenv("POST_PORT");
+  private static String POSTGRES_PORT = System.getenv("POSTGRES_PORT");
 
-  private static String POST_USER = System.getenv("POST_USER");
+  private static String POSTGRES_USER = System.getenv("POSTGRES_USER");
 
   private static String REDIS_HOST = System.getenv("REDIS_HOST");
 
-  private static String REDIS_PASS = System.getenv("REDIS_PASS");
+  private static String REDIS_PASSWORD = System.getenv("REDIS_PASSWORD");
 
   private static String REDIS_PORT = System.getenv("REDIS_PORT");
 
@@ -74,7 +74,7 @@ class Worker {
   }
 
   public static String strConnectionRedis() {
-    return "redis://default:" + REDIS_PASS + "@" + REDIS_HOST + ":" + REDIS_PORT;
+    return "redis://default:" + REDIS_PASSWORD + "@" + REDIS_HOST + ":" + REDIS_PORT;
   }
 
   static Jedis connectToRedis(Jedis conn) {
@@ -125,8 +125,8 @@ class Worker {
   }
 
   public static String strConnectionPostgres() {
-    return "jdbc:postgresql://" + POST_HOST + ":" + POST_PORT + "/" + POST_DATABASE + "?user=" + POST_USER + "&password="
-        + POST_PASS + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
+    return "jdbc:postgresql://" + POSTGRES_HOST + ":" + POSTGRES_PORT + "/" + POSTGRES_DATABASE + "?user=" + POSTGRES_USER + "&password="
+        + POSTGRES_PASS + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
   }
 
   static void sleep(long duration) {
