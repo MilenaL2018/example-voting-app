@@ -43,18 +43,10 @@ jobs:
       - name: Push worker
         run: docker push milelucero98/worker:latest
         
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: /vote
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    
   deployVote:
     name: Deploy Vote in Heroku
     runs-on: ubuntu-latest
-    needs: [deployWorker]
+    needs: [build]
     steps:
       - uses: actions/checkout@v2
       - name: Login to Heroku Container registry
@@ -82,6 +74,7 @@ jobs:
   deployWorker:
     name: Deploy Worker in Heroku
     runs-on: ubuntu-latest
+    needs: [build, deployVote]
     steps:
       - uses: actions/checkout@v2
       - name: Login to Heroku Container registry
@@ -115,6 +108,7 @@ jobs:
   deployResult:
     name: Deploy Result in Heroku
     runs-on: ubuntu-latest
+    needs: [build, deployWorker]
     steps:
       - uses: actions/checkout@v2
       - name: Login to Heroku Container registry
@@ -137,33 +131,33 @@ jobs:
           HEROKU_API: ${{ secrets.HEROKU_API }}
         run: heroku container:release -a example-voting-app-result web
   
-  unit_testing_vote:
-    runs-on: ubuntu-latest
-    needs: [build]
-    strategy:
-      matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: PyTest
-        run: python -m pytest test --junit-xml pytest.xml
-  
-      - name: Upload Unit Test Results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: Unit Test Results (Python ${{ matrix.python-version }})
-          path: pytest.xml
+  #unit_testing_vote:
+  #  runs-on: ubuntu-latest
+  #  needs: [build, deployVote]
+  #  strategy:
+  #    matrix:
+  #      python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
+#
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - name: Set up Python
+  #      uses: actions/setup-python@v2
+  #      with:
+  #        python-version: '3.x'
+  #    - name: Install dependencies
+  #      run: |
+  #        python -m pip install --upgrade pip
+  #        pip install -r requirements.txt
+#
+  #    - name: PyTest
+  #      run: python -m pytest test --junit-xml pytest.xml
+  #
+  #    - name: Upload Unit Test Results
+  #      if: always()
+  #      uses: actions/upload-artifact@v2
+  #      with:
+  #        name: Unit Test Results (Python ${{ matrix.python-version }})
+  #        path: pytest.xml
   
   #publish-test-results:
   #    name: "Publish Unit Tests Results"
