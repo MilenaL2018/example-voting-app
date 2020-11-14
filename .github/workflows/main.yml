@@ -111,12 +111,6 @@ jobs:
         run: |
           cd ./ut
           npx codeceptjs run --steps --reporter mocha-multi
-
-      - name: Archive  results
-        uses: actions/upload-artifact@v2
-        with:
-           name: integration-test-report
-           path: output/result.xml
       
   deployWorker:
     name: Deploy Worker in Heroku
