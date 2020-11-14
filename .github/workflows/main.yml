@@ -43,33 +43,33 @@ jobs:
   #    - name: Push worker
   #      run: docker push milelucero98/worker:latest
   #      
-  #deployVote:
-  #  name: Deploy Vote in Heroku
-  #  runs-on: ubuntu-latest
-  #  needs: [build]
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - name: Login to Heroku Container registry
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:login 
-  #    - name: Setting Vars
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: |
-  #        heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
-  #        heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
-  #        heroku config:set REDIS_PASSWORDWORD=${{ secrets.REDIS_PASSWORDWORD }} -a example-voting-app-vote
-  #    - name: Build and Push
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: |
-  #        cd ./vote
-  #        heroku container:push -a example-voting-app-vote web
-  #    - name: Release
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:release -a example-voting-app-vote web
+  deployVote:
+    name: Deploy Vote in Heroku
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          cd ./vote
+          heroku container:push -a example-voting-app-vote web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:release -a example-voting-app-vote web
 
   deployResult:
     name: Deploy Result in Heroku
@@ -126,15 +126,14 @@ jobs:
         env: 
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: |
-          heroku config:set POSTGRES_PORT=${{ secrets.POSTGRES_PORT  }} -a example-voting-app-worker
+          heroku config:set POSTGRES_PORT=${{ secrets.POSTGRES_PORT  }} -a voting-worker
           heroku config:set POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE  }} -a example-voting-app-worker
           heroku config:set POSTGRES_HOST=${{ secrets.POSTGRES_HOST  }} -a example-voting-app-worker
           heroku config:set POSTGRES_USER=${{ secrets.POSTGRES_USER  }} -a example-voting-app-worker
-          heroku config:set POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD  }} -a example-voting-app-worker
-          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI   }} -a example-voting-app-worker
+          heroku config:set POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASS  }} -a example-voting-app-worker
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-worker
           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
-          heroku config:set REDIS_PASS=${{ secrets.REDIS_PASS }} -a example-voting-app-worker
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-worker
       - name: Build and Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
