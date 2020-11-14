@@ -84,8 +84,7 @@ jobs:
       - name: Setting Vars
         env: 
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-        run: |
-          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
+        run: heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
       - name: Build and Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
@@ -104,13 +103,14 @@ jobs:
       steps:
          - name: Installing mocha
            run: |
-           npm install 
            npx create-codeceptjs .
            npm i mocha-junit-reporter mocha-multi --save
 
          - uses: actions/checkout@v2
          - name: Integration Test
-           run: npx codeceptjs run ut/result_tests.js --steps --reporter mocha-multi
+           run: |
+           cd ./ut
+           npx codeceptjs run --steps --reporter mocha-multi
       
          - name: Archive  results
            uses: actions/upload-artifact@v2
