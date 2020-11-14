@@ -102,15 +102,16 @@ jobs:
     steps:  
       - name: Installing tools
         run: |
-         npm install
-         npx create-codeceptjs .
-         npm i mocha-junit-reporter mocha-multi --save
+          npm install
+          npx create-codeceptjs .
+          npm i mocha-junit-reporter mocha-multi --save
 
       - name: Integration Test
       - uses: actions/checkout@v2
-           run: |
-           cd ./ut
-           npx codeceptjs run --steps --reporter mocha-multi
+        run: |
+          cd ./ut
+          npx codeceptjs run --steps --reporter mocha-multi
+
       - name: Archive  results
         uses: actions/upload-artifact@v2
         with:
