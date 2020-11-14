@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, deployVote]
     steps:  
-      - name: Installing mocha
+      - name: Installing tools
         run: |
          npm install
          npx create-codeceptjs .
