@@ -12,7 +12,7 @@ class Worker {
 
   private static String POSTGRES_DATABASE = System.getenv("POSTGRES_DATABASE");
 
-  private static String POSTGRES_PASS = System.getenv("POSTGRES_PASS");
+  private static String POSTGRES_PASSWORD = System.getenv("POSTGRES_PASSWORD");
 
   private static String POSTGRES_PORT = System.getenv("POSTGRES_PORT");
 
@@ -126,7 +126,7 @@ class Worker {
 
   public static String strConnectionPostgres() {
     return "jdbc:postgresql://" + POSTGRES_HOST + ":" + POSTGRES_PORT + "/" + POSTGRES_DATABASE + "?user=" + POSTGRES_USER + "&password="
-        + POSTGRES_PASS + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
+        + POSTGRES_PASSWORD + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
   }
 
   static void sleep(long duration) {
