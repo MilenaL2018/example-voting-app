@@ -8,23 +8,24 @@ import json
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 
-REDIS_PASSWORDWORD= os.environ['REDIS_PASSWORD']
+REDIS_PASSWORD= os.environ['REDIS_PASSWORD']
 REDIS_HOST= os.environ['REDIS_HOST']
 REDIS_PORT= os.environ['REDIS_PORT']
 
-PORT = int(os.environ.get("PORT", 5050))
+
+PORT = int(os.environ.get("PORT", 5000))
 
 hostname = socket.gethostname()
 
 app = Flask(__name__)
 
-def get_redis(REDIS_HOST, REDIS_PASS, REDIS_PORT):
+def get_redis(REDIS_HOST, REDIS_PASSWORD, REDIS_PORT):
     if not hasattr(g, 'redis'):
         try:
             g.redis = Redis(
                 host=REDIS_HOST, 
                 port=REDIS_PORT,
-                password=REDIS_PASS,
+                password=REDIS_PASSWORD,
                 socket_timeout=5)
         except Exception as ex:
             print('Error:', ex)
@@ -49,7 +50,7 @@ def hello():
 
 def count_vote(vote, voter_id):
     if request.method == 'POST':
-        redis = get_redis(REDIS_HOST=REDIS_HOST, REDIS_PASS=REDIS_PASS, REDIS_PORT=REDIS_PORT)
+        redis = get_redis(REDIS_HOST=REDIS_HOST, REDIS_PASSWORD=REDIS_PASSWORD, REDIS_PORT=REDIS_PORT)
         vote = request.form['vote']
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
         redis.rpush('votes', data)
@@ -62,5 +63,5 @@ def get_voter(voter_id):
         voter_id = hex(random.getrandbits(64))[2:-1]
     return voter_id
 
-if __name__ == "main":
+if __name__ == "__main__":
     app.run(host='0.0.0.0', threaded=True, port=PORT)

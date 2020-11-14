@@ -59,7 +59,7 @@ jobs:
         run: |
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
-          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
+          heroku config:set REDIS_PASSWORDWORD=${{ secrets.REDIS_PASSWORDWORD }} -a example-voting-app-vote
       - name: Build and Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
@@ -93,7 +93,7 @@ jobs:
           heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI   }} -a example-voting-app-worker
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-worker
           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
-          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-worker
+          heroku config:set REDIS_PASSWORDWORD=${{ secrets.REDIS_PASSWORDWORD }} -a example-voting-app-worker
       - name: Build and Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
