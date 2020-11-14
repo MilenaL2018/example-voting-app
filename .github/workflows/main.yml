@@ -104,9 +104,9 @@ jobs:
       steps:
          - name: Installing mocha
            run: |
-           npm install 
-           npx create-codeceptjs .
-           npm i mocha-junit-reporter mocha-multi --save
+            npm install
+            npx create-codeceptjs .
+            npm i mocha-junit-reporter mocha-multi --save
 
          - uses: actions/checkout@v2
          - name: Integration Test
