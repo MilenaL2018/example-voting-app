@@ -8,9 +8,9 @@ import json
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 
-REDIS_PASSWORD= os.environ['REDIS_PASSWORD']
-REDIS_HOST= os.environ['REDIS_HOST']
-REDIS_PORT= os.environ['REDIS_PORT']
+REDIS_PASSWORD= os.environ.get['REDIS_PASSWORD']
+REDIS_HOST= os.environ.get['REDIS_HOST']
+REDIS_PORT= os.environ.get['REDIS_PORT']
 
 
 PORT = int(os.environ.get("PORT", 5000))

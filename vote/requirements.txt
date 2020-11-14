@@ -2,3 +2,6 @@ Flask
 Redis
 gunicorn
 pytest
+pytest-cov
+coverage
+requests
