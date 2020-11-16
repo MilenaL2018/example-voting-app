@@ -86,7 +86,7 @@ jobs:
             cd ./vote
             pip install -r requirements.txt
         - name: PyTest
-          run: python -m pytest ./vote/test/test_app.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          run: python -m pytest ./vote/tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
   
         - name: Upload Unit Test Results
           uses: actions/upload-artifact@v2
