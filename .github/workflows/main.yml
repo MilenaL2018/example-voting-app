@@ -12,7 +12,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-   This workflow contains a single job called "build"
+   #This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -86,13 +86,13 @@ jobs:
             cd ./vote
             pip install -r requirements.txt
         - name: PyTest
-          run: python -m pytest ./vote/tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests/test-results.xml --cov=com --cov-report=xml --cov-report=html
   
         - name: Upload Unit Test Results
           uses: actions/upload-artifact@v2
           with:
             name: Unit Test Results
-            path: junit/test-results.xml
+            path: tests/test-results.xml
           if: always() 
         - name: Publish Unit Test Results
           uses: EnricoMi/publish-unit-test-result-action@v1.4
@@ -103,7 +103,7 @@ jobs:
             comment_title: Unit Test Statistics
             hide_comments: all but latest
             comment_on_pr: true
-            files: junit/test-results.xml
+            files: tests/test-results.xml
             report_individual_runs: true
             deduplicate_classes_by_file_name: false
   
