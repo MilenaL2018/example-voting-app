@@ -109,7 +109,7 @@ jobs:
   it-vote:
     name: Integration Test
     runs-on: ubuntu-latest
-    needs: [deployResult]
+    #needs: [deployResult]
     steps:
       - uses: actions/checkout@v2
       - name: Building
