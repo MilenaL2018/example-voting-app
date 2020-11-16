@@ -73,7 +73,7 @@ jobs:
 
   ut-vote:
       runs-on: ubuntu-latest
-      needs: [build, deployVote]
+      #needs: [build, deployVote]
       strategy:
         matrix:
           python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
