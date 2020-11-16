@@ -71,94 +71,94 @@ jobs:
   #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
   #      run: heroku container:release -a example-voting-app-vote web
 #
-  testing_vote:
-      runs-on: ubuntu-latest
-      needs: [build]
-  
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Python
-          uses: actions/setup-python@v2
-          with:
-            python-version: '3.7'
-        - name: Install dependencies
-          run: |
-            cd ./vote
-            pip install -r requirements.txt
-        - name: PyTest
-          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests/test-results.xml --cov=com --cov-report=xml --cov-report=html
-  
-        - name: Upload Unit Test Results
-          uses: actions/upload-artifact@v2
-          with:
-            name: Unit Test Results
-            path: tests/test-results.xml
-          if: always() 
-        - name: Publish Unit Test Results
-          uses: EnricoMi/publish-unit-test-result-action@v1.4
-          if: always()
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            check_name: Unit Test Results
-            comment_title: Unit Test Statistics
-            hide_comments: all but latest
-            comment_on_pr: true
-            files: tests/test-results.xml
-            report_individual_runs: true
-            deduplicate_classes_by_file_name: false
-  
-  #deployResult:
-  # name: Deploy Result in Heroku
-  # runs-on: ubuntu-latest
-  # needs: [build]
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - name: Login to Heroku Container registry
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:login 
-  #    - name: Setting Vars
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
-  #    - name: Build and Push
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: |
-  #        cd ./result
-  #        heroku container:push -a example-voting-app-result web
-  #    - name: Release
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:release -a example-voting-app-result web
+  #testing_vote:
+  #    runs-on: ubuntu-latest
+  #    needs: [build]
   #
-  #it-result:
-  #  name: Integration Test
-  #  runs-on: ubuntu-latest
-  #  needs: [deployResult, deployVote]
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - name: Building
-  #      run: |
-  #        cd ./integration-test
-  #        npm install
-  #    - name: testing
-  #      run: |
-  #        cd ./integration-test
-  #        npx codeceptjs run --steps --reporter mocha-multi
-  #    - name: Publish Integration Test Results
-  #      uses: EnricoMi/publish-unit-test-result-action@v1.4
-  #      if: always()
-  #      with:
-  #        github_token: ${{ secrets.GITHUB_TOKEN }}
-  #        check_name: Integration Test Result
-  #        comment_title: Integration Test Statistics
-  #        hide_comments: all but latest
-  #        comment_on_pr: true
-  #        files: junit/result.xml
-  #        report_individual_runs: true
-  #        deduplicate_classes_by_file_name: false
+  #    steps:
+  #      - uses: actions/checkout@v2
+  #      - name: Set up Python
+  #        uses: actions/setup-python@v2
+  #        with:
+  #          python-version: '3.7'
+  #      - name: Install dependencies
+  #        run: |
+  #          cd ./vote
+  #          pip install -r requirements.txt
+  #      - name: PyTest
+  #        run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests/test-results.xml --cov=com --cov-report=xml --cov-report=html
   #
+  #      - name: Upload Unit Test Results
+  #        uses: actions/upload-artifact@v2
+  #        with:
+  #          name: Unit Test Results
+  #          path: tests/test-results.xml
+  #        if: always() 
+  #      - name: Publish Unit Test Results
+  #        uses: EnricoMi/publish-unit-test-result-action@v1.4
+  #        if: always()
+  #        with:
+  #          github_token: ${{ secrets.GITHUB_TOKEN }}
+  #          check_name: Unit Test Results
+  #          comment_title: Unit Test Statistics
+  #          hide_comments: all but latest
+  #          comment_on_pr: true
+  #          files: tests/test-results.xml
+  #          report_individual_runs: true
+  #          deduplicate_classes_by_file_name: false
+  #
+  deployResult:
+   name: Deploy Result in Heroku
+   runs-on: ubuntu-latest
+   needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          cd ./result
+          heroku container:push -a example-voting-app-result web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:release -a example-voting-app-result web
+  
+  it-result:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    needs: [deployResult, deployVote]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Building
+        run: |
+          cd ./integration-test
+          npm install
+      - name: testing
+        run: |
+          cd ./integration-test
+          npx codeceptjs run --steps --reporter mocha-multi
+      - name: Publish Integration Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Integration Test Result
+          comment_title: Integration Test Statistics
+          hide_comments: all but latest
+          comment_on_pr: true
+          files: junit/result.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
+  
   ##deployWorker:
   ##  name: Deploy Worker in Heroku
   ##  runs-on: ubuntu-latest
