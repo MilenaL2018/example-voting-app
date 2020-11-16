@@ -8,21 +8,22 @@ import org.json.JSONObject;
 
 class Worker {
 
-  private static String POSTGRES_HOST = System.getenv("POSTGRES_HOST");
+  private static String POSTGRES_HOST = "POSTGRES_HOST";
+  //System.getenv("POSTGRES_HOST");
 
-  private static String POSTGRES_DATABASE = System.getenv("POSTGRES_DATABASE");
+  private static String POSTGRES_DATABASE = "";/*System.getenv("POSTGRES_DATABASE")*/ 
 
-  private static String POSTGRES_PASSWORD = System.getenv("POSTGRES_PASSWORD");
+  private static String POSTGRES_PASSWORD = ""; //System.getenv("POSTGRES_PASSWORD");
 
-  private static String POSTGRES_PORT = System.getenv("POSTGRES_PORT");
+  private static String POSTGRES_PORT = ""; //System.getenv("POSTGRES_PORT");
 
-  private static String POSTGRES_USER = System.getenv("POSTGRES_USER");
+  private static String POSTGRES_USER = ""; //System.getenv("POSTGRES_USER");
 
-  private static String REDIS_HOST = System.getenv("REDIS_HOST");
+  private static String REDIS_HOST = ""; //System.getenv("REDIS_HOST");
 
-  private static String REDIS_PASSWORD = System.getenv("REDIS_PASSWORD");
+  private static String REDIS_PASSWORD = ""; //System.getenv("REDIS_PASSWORD");
 
-  private static String REDIS_PORT = System.getenv("REDIS_PORT");
+  private static String REDIS_PORT = ""; //System.getenv("REDIS_PORT"); 
 
   public static void main(String[] args) {
     try {
@@ -101,6 +102,8 @@ class Worker {
       Class.forName("org.postgresql.Driver");
 
       String url = strConnectionPostgres();
+
+      System.err.println(url);
 
       while (conn == null) {
         try {
