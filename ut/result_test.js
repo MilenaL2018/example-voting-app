@@ -1,4 +1,4 @@
-Feature('result');
+Feature('vote');
 
 const expect = require('chai').expect;
 const {I} = inject();
@@ -8,7 +8,7 @@ Scenario('Verify a successful call', async () => {
 	expect(res.status).to.eql(200);
 });
 
-Scenario('I vote cats!', (I) => {
+Scenario('I vote cats!', ({I}) => {
   I.amOnPage('https://example-voting-app-vote.herokuapp.com/');
   I.see('Cats vs Dogs!', 'h3');
   I.click('Cats');
