@@ -68,7 +68,7 @@ jobs:
   #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
   #      run: heroku container:release -a example-voting-app-vote web
 #
-  testing_vote:
+  unit-testing_vote:
       runs-on: ubuntu-latest
       needs: [build]
   
@@ -83,13 +83,13 @@ jobs:
             cd ./vote
             pip install -r requirements.txt
         - name: PyTest
-          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests-results/test-results.xml --cov=com --cov-report=xml --cov-report=html
   
         - name: Upload Unit Test Results
           uses: actions/upload-artifact@v2
           with:
             name: Unit Test Results
-            path: test-results.xml
+            path: tests-results/test-results.xml
           if: always() 
         - name: Publish Unit Test Results
           uses: EnricoMi/publish-unit-test-result-action@v1.4
@@ -100,10 +100,11 @@ jobs:
             comment_title: Unit Test Statistics
             hide_comments: all but latest
             comment_on_pr: true
-            files: tests/test-results.xml
+            files: tests-results/test-results.xml
             report_individual_runs: true
             deduplicate_classes_by_file_name: false
-  it-:
+
+  integration-testing-vote:
     name: Integration Test
     runs-on: ubuntu-latest
     #needs: [deployVote]
@@ -128,7 +129,7 @@ jobs:
           comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
-          files: ../tests-results/result.xml
+          files: tests-results/result.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
   
