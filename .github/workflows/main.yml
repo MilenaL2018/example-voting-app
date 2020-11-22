@@ -129,7 +129,7 @@ jobs:
           comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
-          files: tests-results/result.xml
+          files: output/result.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
   
@@ -157,33 +157,7 @@ jobs:
   #      env:
   #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
   #      run: heroku container:release -a example-voting-app-result web
-  
-  #it-:
-  #  name: Integration Test
-  #  runs-on: ubuntu-latest
-  #  #needs: [deployVote]
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - name: Building
-  #      run: |
-  #        cd ./ut
-  #        npm install
-  #    - name: testing Vote
-  #      run: |
-  #        cd ./ut
-  #        npx codeceptjs run --steps --reporter mocha-multi
-  #    - name: Publish Integration Test Results
-  #      uses: EnricoMi/publish-unit-test-result-action@v1.4
-  #      if: always()
-  #      with:
-  #        github_token: ${{ secrets.GITHUB_TOKEN }}
-  #        check_name: Integration Test Vote
-  #        comment_title: Integration Test Statistics
-  #        hide_comments: all but latest
-  #        comment_on_pr: true
-  #        files: junit/result.xml
-  #        report_individual_runs: true
-  #        deduplicate_classes_by_file_name: false
+
   
   ##deployWorker:
   ##  name: Deploy Worker in Heroku
