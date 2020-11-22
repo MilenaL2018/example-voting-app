@@ -6,10 +6,10 @@ setHeadlessWhen(process.env.HEADLESS);
 
 exports.config = {
   tests: './*_test.js',
-  output: './output',
+  output: '../tests-results',
   helpers: {
     Playwright: {
-      url: 'http://localhost',
+      url: '',
       show: false,
       browser: 'chromium'
     }
@@ -27,9 +27,9 @@ exports.config = {
         }
       },
       "mocha-junit-reporter": {
-        "stdout": "./output/console.log",
+        "stdout": "../tests-results/console.log",
         "options": {
-          "mochaFile": "./output/result.xml"
+          "mochaFile": "../tests-results/result.xml"
         },
         "attachments": true //add screenshot for a failed test
 		  }
