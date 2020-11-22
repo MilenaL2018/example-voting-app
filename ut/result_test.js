@@ -1,7 +1,6 @@
 Feature('vote');
 
 const expect = require('chai').expect;
-const {I} = inject();
 
 Scenario('Verify a successful call', async () => {
 	const res = await I.sendGetRequest('https://example-voting-app-vote.herokuapp.com/');
