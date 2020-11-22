@@ -9,13 +9,13 @@ exports.config = {
   output: './output',
   helpers: {
     Playwright: {
-      url: '/',
+      url: 'http://localhost',
       show: false,
       browser: 'chromium'
     }
   },
   include: {
-    I: './steps_test.js'
+    I: './steps_file.js'
   },
   bootstrap: null,
   mocha:  {
@@ -27,15 +27,15 @@ exports.config = {
         }
       },
       "mocha-junit-reporter": {
-        "stdout": "../junit/console.log",
+        "stdout": "./output/console.log",
         "options": {
-          "mochaFile": "../junit/result.xml"
+          "mochaFile": "./output/result.xml"
         },
-        "attachments": true
+        "attachments": true //add screenshot for a failed test
 		  }
 		}
 	},
-  name: 'integration-test',
+  name: 'integration-testing',
   plugins: {
     pauseOnFail: {},
     retryFailedStep: {

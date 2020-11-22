@@ -11,12 +11,12 @@
         "codeceptjs:demo:ui": "codecept-ui --app  -c node_modules/@codeceptjs/examples"
     },
     "devDependencies": {
-        "@codeceptjs/configure": "^0.6.0",
+        "@codeceptjs/configure": "^0.6.2",
         "@codeceptjs/examples": "^1.2.1",
         "@codeceptjs/ui": "^0.4.2",
         "chai": "^4.2.0",
-        "codeceptjs": "^3.0.1",
-        "playwright": "^1.5.2"
+        "codeceptjs": "^3.0.2",
+        "playwright": "^1.6.2"
     },
     "dependencies": {
         "mocha-junit-reporter": "^2.0.0",
