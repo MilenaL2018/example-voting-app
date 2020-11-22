@@ -10,10 +10,9 @@ Scenario('Verify a successful call', async () => {
 
 Scenario('I vote cats!', ({I}) => {
   I.amOnPage('https://example-voting-app-vote.herokuapp.com/');
-  I.see('Cats vs Dogs!', 'h3');
-  I.click('Cats');
-  I.click({css: 'button .a'});
-  I.seeElement('fa fa-check-circle');
+  I.seeElement('//*[@id="a"]');
+  I.seeElement('//*[@id="b"]');
   I.scrollPageToBottom();
-  I.seeElement("hostname");
+  I.seeElement('//*[@id="hostname"');
 });
+
