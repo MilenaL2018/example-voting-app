@@ -15,7 +15,7 @@ exports.config = {
     }
   },
   include: {
-    I: './result_test.js'
+    I: './steps_test.js'
   },
   bootstrap: null,
   mocha:  {
