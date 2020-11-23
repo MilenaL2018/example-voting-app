@@ -13,7 +13,7 @@ REDIS_HOST= os.environ.get('REDIS_HOST', 'host')
 REDIS_PORT= os.environ.get('REDIS_PORT', '5001')
 
 
-PORT = int(os.environ.get("PORT", 5000))
+PORT = int(os.environ.get("PORT", 5001))
 
 hostname = socket.gethostname()
 

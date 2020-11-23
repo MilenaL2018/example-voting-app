@@ -31,3 +31,4 @@ class TextService(unittest.TestCase):
     payload={'vote': 'a'}
     response = requests.post(self.url, data=payload)
     assert response.cookies["voter_id"] is not None
+

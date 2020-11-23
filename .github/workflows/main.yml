@@ -22,12 +22,12 @@ jobs:
        - name: Login to DockerHub Registry
          run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
         
-     # - name: Build result
-     #   run: docker build -t milelucero98/result:latest ./result
-     #   
-     # - name: Push result
-     #   run: docker push milelucero98/result:latest
-     #   
+       - name: Build result
+         run: docker build -t milelucero98/result:latest ./result
+         
+       - name: Push result
+         run: docker push milelucero98/result:latest
+         
        - name: Build vote
          run: docker build -t milelucero98/vote:latest ./vote
       
@@ -83,14 +83,14 @@ jobs:
             cd ./vote
             pip install -r requirements.txt
         - name: PyTest
-          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests-results/unit-tests-results.xml --cov=com --cov-report=xml --cov-report=html
+          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests-results/unit-tests-results.xml --cov-report=xml --cov-report=html
   
         - name: Upload Unit Test Results
           uses: actions/upload-artifact@v2
           with:
             name: Unit Test Results
             path: tests-results/unit-tests-results.xml
-          if: ${{always()}}
+          if: ${{ always() }}
 
   integration-testing-vote:
     name: Integration Test
