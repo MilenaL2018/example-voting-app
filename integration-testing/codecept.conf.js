@@ -27,9 +27,9 @@ exports.config = {
         }
       },
       "mocha-junit-reporter": {
-        "stdout": "./output/console.log",
+        "stdout": "./tests-results/console.log",
         "options": {
-          "mochaFile": "./output/result.xml"
+          "mochaFile": "./tests-results/integration-test-result.xml"
         },
         "attachments": true //add screenshot for a failed test
 		  }
