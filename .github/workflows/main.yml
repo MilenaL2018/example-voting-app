@@ -83,7 +83,7 @@ jobs:
             cd ./vote
             pip install -r requirements.txt
         - name: PyTest
-          run: python -m pytest ./vote/tests --doctest-modules --junitxml=tests-results/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          run: python -m pytest ./tests --doctest-modules --junitxml=tests-results/test-results.xml --cov=com --cov-report=xml --cov-report=html
   
         - name: Upload Unit Test Results
           uses: actions/upload-artifact@v2
@@ -129,7 +129,7 @@ jobs:
           comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
-          files: ./integration-testing/output/result.xml
+          files: ./output/result.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
   

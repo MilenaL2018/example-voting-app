@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="2.2240" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2020-11-23T14:28:47" tests="0" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="vote" timestamp="2020-11-23T14:28:47" tests="1" file="/home/milena/Desktop/Proyecto-Integrador/example-voting-app/integration-testing/vote_test.js" time="2.2240" failures="0">
+    <testcase name="vote: I vote cats!" time="2.2240" classname="I vote cats!">
+    </testcase>
+  </testsuite>
+</testsuites>
