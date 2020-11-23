@@ -1,10 +1,9 @@
-from app import app, count_vote
+from app import app, count_vote, get_redis
 import requests
 import unittest
 
 class TextService(unittest.TestCase):
 
-  ## Replace with heroku api
   url = 'https://example-voting-app-vote.herokuapp.com/'
 
   def test_get_status_200(self):
@@ -32,7 +31,3 @@ class TextService(unittest.TestCase):
     payload={'vote': 'a'}
     response = requests.post(self.url, data=payload)
     assert response.cookies["voter_id"] is not None
-
-
-if __name__ == "__main__":
-  unittest.main()

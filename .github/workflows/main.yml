@@ -13,64 +13,64 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
-  #build:
-  #   runs-on: ubuntu-latest
- #
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #    
-  #     - name: Login to DockerHub Registry
-  #       run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-  #      
-  #   # - name: Build result
-  #   #   run: docker build -t milelucero98/result:latest ./result
-  #   #   
-  #   # - name: Push result
-  #   #   run: docker push milelucero98/result:latest
-  #   #   
-  #     - name: Build vote
-  #       run: docker build -t milelucero98/vote:latest ./vote
-  #    
-  #     - name: Push vote
-  #       run: docker push milelucero98/vote:latest
-  #    #
-  #    #- name: Build worker 
-  #    #  run: docker build -t milelucero98/worker:latest ./worker
-  #    #  
-  #    #- name: Push worker
-  #    #  run: docker push milelucero98/worker:latest
-  #    #   
-  #deployVote:
-  #  name: Deploy Vote in Heroku
-  #  runs-on: ubuntu-latest
-  #  needs: [build]
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #    - name: Login to Heroku Container registry
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:login 
-  #    - name: Setting Vars
-  #      env: 
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: |
-  #        heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
-  #        heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
-  #        heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
-  #    - name: Build and Push
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: |
-  #        cd ./vote
-  #        heroku container:push -a example-voting-app-vote web
-  #    - name: Release
-  #      env:
-  #        HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-  #      run: heroku container:release -a example-voting-app-vote web
-#
+  build:
+     runs-on: ubuntu-latest
+ 
+     steps:
+       - uses: actions/checkout@v2
+      
+       - name: Login to DockerHub Registry
+         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+        
+     # - name: Build result
+     #   run: docker build -t milelucero98/result:latest ./result
+     #   
+     # - name: Push result
+     #   run: docker push milelucero98/result:latest
+     #   
+       - name: Build vote
+         run: docker build -t milelucero98/vote:latest ./vote
+      
+       - name: Push vote
+         run: docker push milelucero98/vote:latest
+      #
+      #- name: Build worker 
+      #  run: docker build -t milelucero98/worker:latest ./worker
+      #  
+      #- name: Push worker
+      #  run: docker push milelucero98/worker:latest
+      #   
+  deployVote:
+    name: Deploy Vote in Heroku
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:login 
+      - name: Setting Vars
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: |
+          cd ./vote
+          heroku container:push -a example-voting-app-vote web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+        run: heroku container:release -a example-voting-app-vote web
+
   unit-testing_vote:
       runs-on: ubuntu-latest
-      #needs: [build]
+      needs: [build]
   
       steps:
         - uses: actions/checkout@v2
@@ -109,8 +109,8 @@ jobs:
           npx codeceptjs run --steps --reporter mocha-multi
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.4
-        if: ${{ always() }}
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
+        if: always() 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Integration Test Vote
