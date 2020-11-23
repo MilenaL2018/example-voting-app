@@ -97,7 +97,6 @@ jobs:
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             check_name: Unit Test Results
-            comment_title: Unit Test Statistics
             hide_comments: all but latest
             comment_on_pr: true
             files: ./vote/tests-results/test-results.xml
@@ -126,7 +125,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Integration Test Vote
-          comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
           files: ./integration-testing/output/result.xml
