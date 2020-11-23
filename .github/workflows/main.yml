@@ -95,7 +95,7 @@ jobs:
   integration-testing-vote:
     name: Integration Test
     runs-on: ubuntu-latest
-    #needs: [deployVote]
+    needs: [deployVote]
     steps:
       - uses: actions/checkout@v2
       - name: Building
