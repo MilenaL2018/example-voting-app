@@ -89,7 +89,7 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: Unit Test Results
-            path: tests-results/test-results.xml
+            path: ./vote/tests-results/test-results.xml
           if: always() 
         - name: Publish Unit Test Results
           uses: EnricoMi/publish-unit-test-result-action@v1.4
@@ -100,7 +100,7 @@ jobs:
             comment_title: Unit Test Statistics
             hide_comments: all but latest
             comment_on_pr: true
-            files: tests-results/test-results.xml
+            files: test-results.xml
             report_individual_runs: true
             deduplicate_classes_by_file_name: false
 
@@ -129,7 +129,7 @@ jobs:
           comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
-          files: ./output/result.xml
+          files: ./integration-testing/output/result.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
   
