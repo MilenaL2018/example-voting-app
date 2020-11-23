@@ -90,18 +90,7 @@ jobs:
           with:
             name: Unit Test Results
             path: tests-results/unit-tests-results.xml
-          if: always() 
-        - name: Publish Unit Test Results
-          uses: EnricoMi/publish-unit-test-result-action@v1.4
-          if: ${{ always() }}
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            check_name: Unit Test Results
-            hide_comments: all but latest
-            comment_on_pr: true
-            files: tests-results/unit-tests-results.xml
-            report_individual_runs: true
-            deduplicate_classes_by_file_name: false
+          if: ${{always()}}
 
   integration-testing-vote:
     name: Integration Test
@@ -119,7 +108,7 @@ jobs:
           cd ./integration-testing
           npx codeceptjs run --steps --reporter mocha-multi
 
-      - name: Publish Integration Test Results
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.4
         if: ${{ always() }}
         with:
@@ -127,7 +116,7 @@ jobs:
           check_name: Integration Test Vote
           hide_comments: all but latest
           comment_on_pr: true
-          files: tests-results/integration-test-result.xml
+          files: tests-results/*.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
         
