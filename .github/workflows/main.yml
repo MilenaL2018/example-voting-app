@@ -93,7 +93,7 @@ jobs:
           if: always() 
         - name: Publish Unit Test Results
           uses: EnricoMi/publish-unit-test-result-action@v1.4
-          if: {{ always() }}
+          if: ${{ always() }}
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             check_name: Unit Test Results
@@ -122,7 +122,7 @@ jobs:
 
       - name: Publish Integration Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.4
-        if: {{ always() }}
+        if: ${{ always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Integration Test Vote
