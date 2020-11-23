@@ -13,33 +13,33 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
-  build:
-     runs-on: ubuntu-latest
- 
-     steps:
-       - uses: actions/checkout@v2
-      
-       - name: Login to DockerHub Registry
-         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-        
-     # - name: Build result
-     #   run: docker build -t milelucero98/result:latest ./result
-     #   
-     # - name: Push result
-     #   run: docker push milelucero98/result:latest
-     #   
-       - name: Build vote
-         run: docker build -t milelucero98/vote:latest ./vote
-      
-       - name: Push vote
-         run: docker push milelucero98/vote:latest
-      #
-      #- name: Build worker 
-      #  run: docker build -t milelucero98/worker:latest ./worker
-      #  
-      #- name: Push worker
-      #  run: docker push milelucero98/worker:latest
-      #   
+  #build:
+  #   runs-on: ubuntu-latest
+ #
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #    
+  #     - name: Login to DockerHub Registry
+  #       run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+  #      
+  #   # - name: Build result
+  #   #   run: docker build -t milelucero98/result:latest ./result
+  #   #   
+  #   # - name: Push result
+  #   #   run: docker push milelucero98/result:latest
+  #   #   
+  #     - name: Build vote
+  #       run: docker build -t milelucero98/vote:latest ./vote
+  #    
+  #     - name: Push vote
+  #       run: docker push milelucero98/vote:latest
+  #    #
+  #    #- name: Build worker 
+  #    #  run: docker build -t milelucero98/worker:latest ./worker
+  #    #  
+  #    #- name: Push worker
+  #    #  run: docker push milelucero98/worker:latest
+  #    #   
   #deployVote:
   #  name: Deploy Vote in Heroku
   #  runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
 #
   unit-testing_vote:
       runs-on: ubuntu-latest
-      needs: [build]
+      #needs: [build]
   
       steps:
         - uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
           if: always() 
         - name: Publish Unit Test Results
           uses: EnricoMi/publish-unit-test-result-action@v1.4
-          if: always()
+          if: {{ always() }}
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             check_name: Unit Test Results
@@ -122,14 +122,14 @@ jobs:
 
       - name: Publish Integration Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.4
-        if: always()
+        if: {{ always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Integration Test Vote
           comment_title: Integration Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
-          files: output/result.xml
+          files: ./integration-testing/output/result.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
   
