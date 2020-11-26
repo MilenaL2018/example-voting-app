@@ -68,26 +68,26 @@ jobs:
           if: ${{ always() }}
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            check_name: Integration Test Vote
+            check_name: Unit Testing Vote Report
             hide_comments: all but latest
             comment_on_pr: true
-            files: vote/test-results.xml
+            files: tests-results/*.xml
             report_individual_runs: true
             deduplicate_classes_by_file_name: false
 
-  #sonarcloud:
-  #  name: SonarCloud
-  #  needs: [build]
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: actions/checkout@v2
-  #    with:
-  #        fetch-depth: 0  
-  #  - name: SonarCloud Scan
-  #    uses: SonarSource/sonarcloud-github-action@master
-  #    env:
-  #      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-  #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  sonarcloud:
+    name: SonarCloud
+    needs: [unit-testing-vote]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0  
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
   deployVote:
     name: Deploy Vote in Heroku
@@ -199,7 +199,7 @@ jobs:
         if: always() 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Integration Test Vote
+          check_name: Integration Test Vote Report
           hide_comments: all but latest
           comment_on_pr: true
           files: tests-results/integration-test-result.xml
