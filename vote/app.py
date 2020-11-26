@@ -10,10 +10,10 @@ option_b = os.getenv('OPTION_B', "Dogs")
 
 REDIS_PASSWORD= os.environ.get('REDIS_PASSWORD', '123')
 REDIS_HOST= os.environ.get('REDIS_HOST', 'host')
-REDIS_PORT= os.environ.get('REDIS_PORT', '5001')
+REDIS_PORT= os.environ.get('REDIS_PORT', '5000')
 
 
-PORT = int(os.environ.get("PORT", 5001))
+PORT = int(os.environ.get("PORT", 5000))
 
 hostname = socket.gethostname()
 
