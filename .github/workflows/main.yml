@@ -152,8 +152,9 @@ jobs:
         env: 
           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: heroku container:login
-     - name: Configuration 
-       env: 
+        
+      - name: Configuration 
+        env: 
          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: |
          heroku config:set POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} -a example-voting-app-worker
@@ -165,17 +166,17 @@ jobs:
          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-worker
      
-     - name: Build and Push
-       env:
+      - name: Build and Push
+        env:
          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
         run: |
          cd ./worker
          heroku container:push -a example-voting-app-worker web
          
-     - name: Release
-       env:
+      - name: Release
+        env:
          HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
-       run: heroku container:release -a example-voting-app-worker web
+        run: heroku container:release -a example-voting-app-worker web
 
   integration-testing-vote:
     name: Integration Test
