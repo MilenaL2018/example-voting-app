@@ -39,7 +39,7 @@ jobs:
        - name: Push worker
          run: docker push milelucero98/worker:latest
       
-  unit-testing_vote:
+  unit-testing-vote:
       runs-on: ubuntu-latest
       needs: [build]
   
