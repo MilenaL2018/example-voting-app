@@ -13,31 +13,27 @@ jobs:
  
      steps:
        - uses: actions/checkout@v2
-
-       - name: Generate build number
-         id: buildnumber
-         uses: einaregilsson/build-number@v3
       
        - name: Login to DockerHub Registry
          run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
         
        - name: Build result
-         run: docker build -t milelucero98/result:$BUILD_NUMBER ./result
+         run: docker build -t milelucero98/result:latest ./result
          
        - name: Push result
-         run: docker push milelucero98/result:$BUILD_NUMBER
+         run: docker push milelucero98/result:latest
          
        - name: Build vote
-         run: docker build -t milelucero98/vote:$BUILD_NUMBER ./vote
+         run: docker build -t milelucero98/vote:latest ./vote
       
        - name: Push vote
-         run: docker push milelucero98/vote:$BUILD_NUMBER
+         run: docker push milelucero98/vote:latest
        
        - name: Build worker 
-         run: docker build -t milelucero98/worker:$BUILD_NUMBER ./worker
+         run: docker build -t milelucero98/worker:latest ./worker
          
        - name: Push worker
-         run: docker push milelucero98/worker:$BUILD_NUMBER
+         run: docker push milelucero98/worker:latest
       
   unit-testing-vote:
       runs-on: ubuntu-latest
