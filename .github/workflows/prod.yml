@@ -1,0 +1,112 @@
+name: Prod
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+    deployVote:
+        name: Deploy Vote in Heroku
+        runs-on: ubuntu-latest
+        needs: [unit-testing_vote]
+        steps:
+          - uses: actions/checkout@v2
+          - name: Login to Heroku Container registry
+            env: 
+              HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+            run: heroku container:login 
+          - name: Setting Vars
+            env: 
+              HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+            run: |
+              heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-vote
+              heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-vote
+              heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-vote
+          - name: Build and Push
+            env:
+              HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+            run: |
+              cd ./vote
+              heroku container:push -a example-voting-app-vote web
+          - name: Release
+            env:
+              HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+            run: heroku container:release -a example-voting-app-vote web
+      
+    deployResult:
+      name: Deploy Result in Heroku
+      runs-on: ubuntu-latest
+      needs: [build]
+      steps:
+         - uses: actions/checkout@v2
+         - name: Login to Heroku Container registry
+           env: 
+             HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+           run: heroku container:login 
+         - name: Setting Vars
+           env: 
+             HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+           run: heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a example-voting-app-result
+         - name: Build and Push
+           env:
+             HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+           run: |
+             cd ./result
+             heroku container:push -a example-voting-app-result web
+         - name: Release
+           env:
+             HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+           run: heroku container:release -a example-voting-app-result web
+    
+    deployWorker:
+      name: Deploy Worker in Heroku
+      runs-on: ubuntu-latest
+      needs: [build]
+      steps:
+        - uses: actions/checkout@v2
+        - name: Login to Heroku Container registry
+          env: 
+            HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+          run: heroku container:login
+          
+        - name: Configuration 
+          env: 
+           HEROKU_API_KEY: ${{ secrets.HEROKU_API }}
+          run: |
+           heroku config:set POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} -a example-voting-app-worker
+           heroku config:set POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }} -a example-voting-app-worker
+           heroku config:set POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} -a example-voting-app-worker
+           heroku config:set POSTGRES_USER=${{ secrets.POSTGRES_USER }} -a example-voting-app-worker
+           heroku config:set POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -a example-voting-app-worker
+           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a example-voting-app-worker
+           heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a example-voting-app-worker
+           heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a example-voting-app-worker
+    
+    integration-testing-vote:
+     name: Integration Test
+     runs-on: ubuntu-latest
+     needs: [deployVote, deployResult, deployWorker]
+     steps:
+       - uses: actions/checkout@v2
+       - name: Building
+         run: |
+           cd ./integration-testing
+           npm install
+           
+       - name: testing Vote
+         run: |
+           cd ./integration-testing
+           npx codeceptjs run --steps --reporter mocha-multi
+
+       - name: Publish Test Results
+         uses: EnricoMi/publish-unit-test-result-action@v1.5
+         if: always() 
+         with:
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+           check_name: Integration Test Vote Report
+           hide_comments: all but latest
+           comment_on_pr: true
+           files: tests-results/integration-test-result.xml
+           report_individual_runs: true
+           deduplicate_classes_by_file_name: false

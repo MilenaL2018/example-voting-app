@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
+name: Dev
 
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
@@ -17,27 +13,31 @@ jobs:
  
      steps:
        - uses: actions/checkout@v2
+
+       - name: Generate build number
+         id: buildnumber
+         uses: einaregilsson/build-number@v3
       
        - name: Login to DockerHub Registry
          run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
         
        - name: Build result
-         run: docker build -t milelucero98/result:latest ./result
+         run: docker build -t milelucero98/result:$BUILD_NUMBER ./result
          
        - name: Push result
-         run: docker push milelucero98/result:latest
+         run: docker push milelucero98/result:$BUILD_NUMBER
          
        - name: Build vote
-         run: docker build -t milelucero98/vote:latest ./vote
+         run: docker build -t milelucero98/vote:$BUILD_NUMBER ./vote
       
        - name: Push vote
-         run: docker push milelucero98/vote:latest
+         run: docker push milelucero98/vote:$BUILD_NUMBER
        
        - name: Build worker 
-         run: docker build -t milelucero98/worker:latest ./worker
+         run: docker build -t milelucero98/worker:$BUILD_NUMBER ./worker
          
        - name: Push worker
-         run: docker push milelucero98/worker:latest
+         run: docker push milelucero98/worker:$BUILD_NUMBER
       
   unit-testing-vote:
       runs-on: ubuntu-latest

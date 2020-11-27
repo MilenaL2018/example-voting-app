@@ -49,7 +49,6 @@ class Worker {
         updateVote(dbConn, voterID, vote);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
       System.exit(1);
     }
   }
@@ -112,7 +111,6 @@ class Worker {
       st.executeUpdate();
 
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
       System.exit(1);
     }
 
