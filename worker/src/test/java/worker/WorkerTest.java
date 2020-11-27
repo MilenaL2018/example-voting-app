@@ -19,13 +19,6 @@ public class WorkerTest {
         }
     }
 
-
-
-    @Test
-    public static String strConnectionRedis() {
-        Worker test = new Worker();
-        String connection = Worker.connectToRedis();
-        return "redis://default:" + REDIS_PASSWORD + "@" + REDIS_HOST + ":" + REDIS_PORT;
-    } */
+}*/
 
 }

@@ -6,7 +6,7 @@ import random
 import json
 
 option_a = os.getenv('OPTION_A', "Cats")
-option_b = os.getenv('OPTION_B', "Dogs")
+option_b = os.getenv('OPTION_B', "Owls")
 
 REDIS_PASSWORD= os.environ.get('REDIS_PASSWORD', '123')
 REDIS_HOST= os.environ.get('REDIS_HOST', 'host')
